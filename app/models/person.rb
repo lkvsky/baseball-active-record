@@ -42,12 +42,18 @@ class Person < ActiveRecord::Base
     .group("Teams.yearID")
     .group(:playerID)
     .order('teams_count DESC')
-    .limit(2)
+    .limit(10)
   end
 
   def self.manager_and_player
     Person.select('Master.*')
     .where('playerID <> "" AND managerID <> ""')
+  end
+
+  def self.only_one_team
+    Person.select('Master.*, COUNT(*) as teams_count')
+    .joins(:played_teams)
+    .group(:playerID)
   end
 
   def best_year
