@@ -36,6 +36,15 @@ class Person < ActiveRecord::Base
     # WHERE
   end
 
+  def self.played_most_teams
+    Person.select('Master.*, COUNT(*) as teams_count')
+    .joins(:played_teams)
+    .group("Teams.yearID")
+    .group(:playerID)
+    .order('teams_count DESC')
+    .limit(2)
+  end
+
   def self.manager_and_player
     Person.select('Master.*')
     .where('playerID <> "" AND managerID <> ""')

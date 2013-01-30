@@ -3,4 +3,5 @@ class Team < ActiveRecord::Base
   set_primary_keys(:yearID, :lgID, :teamID)
 
   belongs_to :managership, :primary_key => [:teamID, :yearID, :lgID], :foreign_key => [:teamID, :yearID, :lgID]
+  belongs_to :playership, :primary_key => [:teamID, :yearID, :lgID], :foreign_key => [:teamID, :yearID, :lgID]
 end
