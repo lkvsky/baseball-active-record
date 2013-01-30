@@ -3,7 +3,7 @@ class Person < ActiveRecord::Base
   set_primary_key(:lahmanID)
 
   has_many :playerships, :foreign_key => :playerID, :primary_key => :playerID
-  has_many :played_teams, :class_name => "Team", :through => :playerships
+  has_many :played_teams, :through => :playerships, :source => :teams
 
   has_many :batting_lines, :foreign_key => :playerID, :primary_key => :playerID
   has_many :pitching_lines, :foreign_key => :playerID, :primary_key => :playerID
@@ -11,9 +11,8 @@ class Person < ActiveRecord::Base
   has_many :salaries, :foreign_key => :playerID, :primary_key => :playerID
 
   has_many :managerships, :foreign_key => :managerID, :primary_key => :managerID
-  has_many :managed_teams, :class_name => "Team", :through => :managerships
+  has_many :managed_teams, :through => :managerships, :source => :teams
 
-  # in 1000 at bats, they hit 300 (H), divide hits/at bats
   def self.good_batters
     good_batters = Person.select('Master.*, H/AB as batting_average')
     .where('AB >= 100')
@@ -32,9 +31,9 @@ class Person < ActiveRecord::Base
   end
 
   def self.managed_most_players
-    Person.select('Master.*')
-    .includes(:managerships)
-    .limit(10)
+    # SELECT Master.*, COUNT(*) FROM Master
+    # JOIN Managers
+    # WHERE
   end
 
   def self.manager_and_player
